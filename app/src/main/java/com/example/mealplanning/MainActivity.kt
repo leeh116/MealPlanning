@@ -17,9 +17,15 @@
 package com.example.mealplanning
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mealplanning.adapter.ItemAdapter
@@ -32,8 +38,10 @@ import java.time.Month
 import java.time.format.DateTimeFormatter
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener  {
     private lateinit var binding: ActivityMainBinding
+    var languages =
+        arrayOf<String>("C++", "Java", "Kotlin", "JavaScript", "Python", "PHP", "C#", "C")
 
     private val affList = mutableListOf<Affirmation>()
 
@@ -59,7 +67,11 @@ class MainActivity : AppCompatActivity() {
             if (binding.mealInput.text.isNotEmpty()) {
                 println("here")
                 println(binding.dateInput.month)
-                val theDate = LocalDate.of(binding.dateInput.year, Month.of(binding.dateInput.month+1), binding.dateInput.dayOfMonth)
+                val theDate = LocalDate.of(
+                    binding.dateInput.year,
+                    Month.of(binding.dateInput.month + 1),
+                    binding.dateInput.dayOfMonth
+                )
                 println(theDate)
                 affList.add(Affirmation(binding.mealInput.text.toString(), theDate))
                 myAdapter.notifyDataSetChanged()
@@ -68,5 +80,40 @@ class MainActivity : AppCompatActivity() {
         }
 
         recyclerView.adapter = myAdapter
+
+        val languageSpinner = binding.idLanguageSpinner
+
+        // on below line we are adding click listener for our spinner
+        languageSpinner.onItemSelectedListener = this
+
+        // on below line we are initializing adapter for our spinner
+        val adapter: ArrayAdapter<CharSequence> =
+            ArrayAdapter(this, android.R.layout.simple_spinner_item, languages)
+
+        // on below line we are setting drop down view resource for our adapter.
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        // on below line we are setting adapter for spinner.
+        languageSpinner.adapter = adapter
+
+        // on below line we are creating a variable to which we have to set our spinner item selected.
+        val selection = "Python"
+
+        // on below line we are getting the position of the item by the item name in our adapter.
+        val spinnerPosition: Int = adapter.getPosition(selection)
+
+        // on below line we are setting selection for our spinner to spinner position.
+        languageSpinner.setSelection(spinnerPosition)
+
+    }
+
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        // on below line we are displaying toast message for selected item.
+        Toast.makeText(this, "" + languages.get(position) + " Selected..", Toast.LENGTH_SHORT)
+            .show()
+    }
+
+    override fun onNothingSelected(parent: AdapterView<*>?) {
+
     }
 }

@@ -12,4 +12,9 @@
     <string name="affirmation10">I will be present in all the moments that this day brings.</string>
     <string name="meal">meal</string>
     <string name="submit">submit</string>
+    <string-array name="planets_array">
+        <item>Breakfast</item>
+        <item>Lunch</item>
+        <item>Dinner</item>
+    </string-array>
 </resources>
